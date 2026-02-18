@@ -7,7 +7,7 @@ import {
   FileBarChart, LayoutGrid, Server, Smile, Baby, Eye, FileDown, Search,
   Clock, Database, Lock, Plus, Wrench, FileClock, ArrowRightLeft,
   ShoppingCart, Send, CheckSquare, Ban, History, Upload, Info, Printer,
-  X, Menu
+  X, Menu, Bone,
 } from 'lucide-react';
 
 // --- CUSTOM STYLES FOR ANIMATIONS (Replaces tailwindcss-animate) ---
@@ -89,6 +89,53 @@ const InvoiceModal = ({ invoice, onClose }: { invoice: InvoiceItem | null; onClo
     </div>
   );
 };
+
+// --- CAPEX REQUEST MODAL ---
+const CapexModal = ({ isOpen, onClose }: { isOpen: boolean; onClose: () => void }) => {
+    if (!isOpen) return null;
+    return (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm p-4 animate-fade-in">
+             <div className="bg-white w-full max-w-lg rounded-xl shadow-2xl overflow-hidden animate-slide-in-bottom">
+                <div className="bg-blue-600 p-4 flex justify-between items-center text-white">
+                    <h3 className="font-bold flex items-center"><Landmark className="w-5 h-5 mr-2" /> New Capex Request</h3>
+                    <button onClick={onClose}><X className="w-5 h-5" /></button>
+                </div>
+                <div className="p-6 space-y-4">
+                    <div>
+                        <label className="block text-sm font-medium text-slate-700 mb-1">Asset Category</label>
+                        <select className="w-full border border-slate-300 rounded-lg p-2.5 text-sm focus:ring-2 focus:ring-blue-500 outline-none">
+                            <option>Medical Equipment</option>
+                            <option>IT Infrastructure</option>
+                            <option>Facility & Plant</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label className="block text-sm font-medium text-slate-700 mb-1">Description</label>
+                        <input type="text" className="w-full border border-slate-300 rounded-lg p-2.5 text-sm outline-none focus:border-blue-500" placeholder="E.g. MRI Machine Upgrade" />
+                    </div>
+                    <div className="grid grid-cols-2 gap-4">
+                        <div>
+                            <label className="block text-sm font-medium text-slate-700 mb-1">Est. Cost (₹)</label>
+                            <input type="number" className="w-full border border-slate-300 rounded-lg p-2.5 text-sm outline-none focus:border-blue-500" placeholder="0.00" />
+                        </div>
+                        <div>
+                            <label className="block text-sm font-medium text-slate-700 mb-1">Urgency</label>
+                            <select className="w-full border border-slate-300 rounded-lg p-2.5 text-sm outline-none">
+                                <option>Medium</option>
+                                <option>High</option>
+                                <option>Critical</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div className="pt-4 flex gap-3">
+                        <button onClick={onClose} className="flex-1 bg-slate-100 text-slate-700 py-2.5 rounded-lg font-medium hover:bg-slate-200">Cancel</button>
+                        <button onClick={onClose} className="flex-1 bg-blue-600 text-white py-2.5 rounded-lg font-medium hover:bg-blue-700 shadow-lg shadow-blue-600/20">Submit Request</button>
+                    </div>
+                </div>
+             </div>
+        </div>
+    );
+}
 
 // --- SVG CURVE CHART ---
 const SvgCurveChart = ({ data, color, id }: { data: { amount: number }[]; color: string; id: string }) => {
@@ -288,6 +335,7 @@ const App = () => {
   const [notification, setNotification] = useState<{ message: string; type: string } | null>(null);
   const [selectedInvoice, setSelectedInvoice] = useState<InvoiceItem | null>(null);
   const [metricsType, setMetricsType] = useState('financial');
+  const [isCapexModalOpen, setIsCapexModalOpen] = useState(false);
   const [ipoChecklist, setIpoChecklist] = useState([
     { id: 1, text: 'Independent Directors Appointed (3/3)', completed: true },
     { id: 2, text: 'Audit Committee Formed', completed: true },
@@ -899,7 +947,7 @@ const App = () => {
             <button onClick={() => showNotification('Batch #9921 submitted to Clearing House (142 Claims).', 'success')} className="flex items-center px-3 py-2 bg-blue-600 text-white border border-blue-600 rounded-lg text-xs font-medium hover:bg-blue-700 transition-colors shadow-sm"><Send className="w-3 h-3 mr-2" /> Submit Batch</button>
           </div>
         </div>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-6">
           <div className="bg-blue-50 p-4 rounded-lg border border-blue-100">
             <p className="text-xs text-blue-600 font-medium">Claims Pending ({'>'}90 Days)</p>
             <div className="flex justify-between items-end mt-1"><p className="text-2xl font-bold text-blue-900">₹1.2 Cr</p><button onClick={() => showNotification("Filtered list: 90+ days aging claims.", "info")} className="text-[10px] bg-blue-100 text-blue-700 px-2 py-1 rounded hover:bg-blue-200">View List</button></div>
@@ -913,6 +961,11 @@ const App = () => {
             <p className="text-xs text-emerald-600 font-medium">Collection Efficiency</p>
             <p className="text-2xl font-bold text-emerald-900 mt-1">92%</p>
             <p className="text-[10px] text-emerald-500 mt-1">MoM: +1.5%</p>
+          </div>
+          <div className="bg-indigo-50 p-4 rounded-lg border border-indigo-100">
+            <p className="text-xs text-indigo-600 font-medium">Avg Days to Payment</p>
+            <p className="text-2xl font-bold text-indigo-900 mt-1">45 Days</p>
+            <p className="text-[10px] text-indigo-500 mt-1">Benchmark: 40 Days</p>
           </div>
         </div>
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
@@ -933,15 +986,16 @@ const App = () => {
           </div>
           <div className="bg-white p-4 rounded-lg border border-slate-200">
             <h4 className="text-sm font-bold text-slate-700 mb-4">Aging Analysis (Days Outstanding)</h4>
-            <div className="flex items-end h-40 space-x-4">
-              {[{ h: '60%', val: '₹4.2 Cr', color: 'bg-emerald-400', label: '0-30' }, { h: '30%', val: '₹2.1 Cr', color: 'bg-blue-400', label: '31-60' }, { h: '15%', val: '₹1.1 Cr', color: 'bg-amber-400', label: '61-90' }, { h: '25%', val: '₹1.8 Cr', color: 'bg-red-400', label: '90+' }].map((bar, i) => (
-                <div key={i} className="flex-1 flex flex-col items-center justify-end group">
-                  <span className="mb-2 text-xs font-bold text-slate-700">{bar.val}</span>
-                  <div className={`w-full ${bar.color} rounded-t hover:opacity-80 transition-opacity cursor-pointer relative`} style={{ height: bar.h }}>
+            <div className="relative h-48 w-full pt-4">
+              <div className="absolute inset-0 flex items-end justify-between px-4 z-10">
+                {[{ h: '60%', val: '₹4.2 Cr', color: 'bg-emerald-400', label: '0-30' }, { h: '30%', val: '₹2.1 Cr', color: 'bg-blue-400', label: '31-60' }, { h: '15%', val: '₹1.1 Cr', color: 'bg-amber-400', label: '61-90' }, { h: '25%', val: '₹1.8 Cr', color: 'bg-red-400', label: '90+' }].map((bar, i) => (
+                  <div key={i} className="flex-1 flex flex-col items-center justify-end group h-full relative">
+                    <span className="absolute -top-6 text-xs font-bold text-slate-700">{bar.val}</span>
+                    <div className={`w-12 ${bar.color} rounded-t hover:opacity-80 transition-opacity cursor-pointer`} style={{ height: bar.h }}></div>
+                    <span className={`text-xs text-slate-500 mt-2 font-medium ${i === 3 ? 'text-red-600' : ''}`}>{bar.label}</span>
                   </div>
-                  <span className={`text-xs text-slate-500 mt-2 font-medium ${i === 3 ? 'text-red-600' : ''}`}>{bar.label}</span>
-                </div>
-              ))}
+                ))}
+              </div>
             </div>
           </div>
         </div>
@@ -975,11 +1029,11 @@ const App = () => {
             <h4 className="font-bold text-blue-900 text-sm mb-3 flex items-center"><ClipboardList className="w-4 h-4 mr-2" /> Active Purchase Orders</h4>
             <div className="space-y-3">
               <div className="flex justify-between items-center bg-white p-2.5 rounded shadow-sm border border-blue-100">
-                <div><span className="font-bold text-slate-700 block text-xs">PO #9001 - Pharmacy</span><span className="text-[10px] text-blue-500">Status: Dispatched</span></div>
+                <div><span className="font-bold text-slate-700 block text-xs">PO #9001 - Pharmacy Central</span><span className="text-[10px] text-blue-500">Status: Dispatched</span></div>
                 <button onClick={() => showNotification("Tracking: Expected Delivery Tomorrow.", "info")} className="text-[10px] bg-blue-100 text-blue-700 px-2 py-1 rounded font-medium hover:bg-blue-200">Track</button>
               </div>
               <div className="flex justify-between items-center bg-white p-2.5 rounded shadow-sm border border-blue-100">
-                <div><span className="font-bold text-slate-700 block text-xs">PO #9003 - Consumables</span><span className="text-[10px] text-amber-500">Status: Pending</span></div>
+                <div><span className="font-bold text-slate-700 block text-xs">PO #9003 - Consumables Inc</span><span className="text-[10px] text-amber-500">Status: Pending Approval</span></div>
                 <button onClick={() => showNotification("Reminder sent to Finance Head.", "success")} className="text-[10px] border border-slate-300 text-slate-600 px-2 py-1 rounded font-medium hover:bg-slate-100">Nudge</button>
               </div>
             </div>
@@ -1105,27 +1159,78 @@ const App = () => {
     <div className="space-y-6 animate-fade-in">
       <div className="bg-white p-6 rounded-xl shadow-sm border border-slate-100">
         <h3 className="text-lg font-bold text-slate-900 flex items-center mb-6"><Activity className="w-5 h-5 mr-2 text-rose-600" /> Clinical Operations & SOP Tracking</h3>
-        <p className="text-sm text-slate-500 mb-6">Tracking compliance and billing for ongoing Clinical cycles based on the standard operating procedure (SOP).</p>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
-          <div className="p-5 bg-pink-50 rounded-xl border border-pink-100"><p className="text-sm font-medium text-pink-800">Active Cycles</p><h4 className="text-3xl font-bold text-pink-600 mt-2">42</h4></div>
-          <div className="p-5 bg-blue-50 rounded-xl border border-blue-100"><p className="text-sm font-medium text-blue-800">SOP Compliance Rate</p><h4 className="text-3xl font-bold text-blue-600 mt-2">100%</h4></div>
-          <div className="p-5 bg-emerald-50 rounded-xl border border-emerald-100"><p className="text-sm font-medium text-emerald-800">Billing Discrepancies</p><h4 className="text-3xl font-bold text-emerald-600 mt-2">0</h4></div>
+        <p className="text-sm text-slate-500 mb-6">Tracking clinical compliance, protocols, and outcomes across key specialties.</p>
+        
+        {/* IVF Section */}
+        <div className="mb-8">
+           <h4 className="text-sm font-bold text-slate-800 mb-4 flex items-center"><Baby className="w-4 h-4 mr-2 text-blue-600" /> IVF / Reproductive Medicine</h4>
+           <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
+             <div className="p-5 bg-pink-50 rounded-xl border border-pink-100"><p className="text-sm font-medium text-pink-800">Active Cycles</p><h4 className="text-3xl font-bold text-pink-600 mt-2">42</h4></div>
+             <div className="p-5 bg-blue-50 rounded-xl border border-blue-100"><p className="text-sm font-medium text-blue-800">SOP Compliance Rate</p><h4 className="text-3xl font-bold text-blue-600 mt-2">100%</h4></div>
+             <div className="bg-white border border-slate-200 rounded-lg p-4 flex flex-col justify-center items-center">
+                <p className="text-xs text-slate-500 uppercase mb-1">Overall Success Rate</p>
+                <p className="text-4xl font-bold text-emerald-600">42%</p>
+                <p className="text-[10px] text-slate-400 mt-1">National Avg: 35%</p>
+             </div>
+           </div>
+           <div className="col-span-2 bg-slate-50 border border-slate-200 rounded-lg p-4 overflow-x-auto">
+             <h4 className="text-xs font-bold text-slate-500 mb-3 uppercase">Cycle Stage Funnel</h4>
+             <div className="flex items-center space-x-2 min-w-[500px]">
+               <div className="flex-1 text-center"><div className="bg-blue-100 py-3 rounded-l-lg border-r border-blue-200 text-blue-700 font-bold text-sm">Registration (42)</div></div>
+               <div className="flex-1 text-center"><div className="bg-blue-200 py-3 border-r border-blue-300 text-blue-800 font-bold text-sm">Stimulation (30)</div></div>
+               <div className="flex-1 text-center"><div className="bg-blue-300 py-3 border-r border-blue-400 text-blue-900 font-bold text-sm">Egg Pickup (18)</div></div>
+               <div className="flex-1 text-center"><div className="bg-blue-600 py-3 rounded-r-lg text-white font-bold text-sm">Transfer (12)</div></div>
+             </div>
+           </div>
         </div>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
-          <div className="col-span-2 bg-slate-50 border border-slate-200 rounded-lg p-4 overflow-x-auto">
-            <h4 className="text-sm font-bold text-slate-700 mb-4">Cycle Stage Funnel</h4>
-            <div className="flex items-center space-x-2 min-w-[500px]">
-              <div className="flex-1 text-center"><div className="bg-blue-100 py-3 rounded-l-lg border-r border-blue-200 text-blue-700 font-bold text-sm">Registration (42)</div></div>
-              <div className="flex-1 text-center"><div className="bg-blue-200 py-3 border-r border-blue-300 text-blue-800 font-bold text-sm">Stimulation (30)</div></div>
-              <div className="flex-1 text-center"><div className="bg-blue-300 py-3 border-r border-blue-400 text-blue-900 font-bold text-sm">Egg Pickup (18)</div></div>
-              <div className="flex-1 text-center"><div className="bg-blue-600 py-3 rounded-r-lg text-white font-bold text-sm">Transfer (12)</div></div>
-            </div>
-          </div>
-          <div className="bg-white border border-slate-200 rounded-lg p-4 flex flex-col justify-center items-center">
-            <p className="text-xs text-slate-500 uppercase mb-1">Overall Success Rate</p>
-            <p className="text-4xl font-bold text-emerald-600">42%</p>
-            <p className="text-[10px] text-slate-400 mt-1">National Avg: 35%</p>
-          </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+           {/* Cardiology Section */}
+           <div className="border border-slate-200 rounded-xl p-5 hover:shadow-md transition-shadow">
+              <h4 className="text-sm font-bold text-slate-800 mb-4 flex items-center"><HeartPulse className="w-4 h-4 mr-2 text-red-600" /> Cardiology Metrics</h4>
+              <div className="space-y-4">
+                 <div className="flex justify-between items-center border-b border-slate-100 pb-2">
+                    <span className="text-sm text-slate-600">Door-to-Balloon Time (Avg)</span>
+                    <span className="font-bold text-emerald-600">52 mins <span className="text-xs font-normal text-slate-400">(Target: &lt;90)</span></span>
+                 </div>
+                 <div className="flex justify-between items-center border-b border-slate-100 pb-2">
+                    <span className="text-sm text-slate-600">Cath Lab Utilization</span>
+                    <span className="font-bold text-blue-600">78%</span>
+                 </div>
+                 <div className="flex justify-between items-center">
+                    <span className="text-sm text-slate-600">Readmission Rate (30 Days)</span>
+                    <span className="font-bold text-slate-800">1.2%</span>
+                 </div>
+              </div>
+           </div>
+
+           {/* Orthopedics Section */}
+           <div className="border border-slate-200 rounded-xl p-5 hover:shadow-md transition-shadow">
+              <h4 className="text-sm font-bold text-slate-800 mb-4 flex items-center"><Bone className="w-4 h-4 mr-2 text-amber-600" /> Orthopaedics & Trauma</h4>
+              <div className="space-y-4">
+                 <div className="flex justify-between items-center border-b border-slate-100 pb-2">
+                    <span className="text-sm text-slate-600">Surgical Site Infection Rate</span>
+                    <span className="font-bold text-emerald-600">0.0% <span className="text-xs font-normal text-slate-400">(Last 3 mo)</span></span>
+                 </div>
+                 <div className="flex justify-between items-center border-b border-slate-100 pb-2">
+                    <span className="text-sm text-slate-600">Implant Registry Compliance</span>
+                    <span className="font-bold text-emerald-600">100%</span>
+                 </div>
+                 <div className="flex justify-between items-center">
+                    <span className="text-sm text-slate-600">Avg Length of Stay (TKR)</span>
+                    <span className="font-bold text-slate-800">3.5 Days</span>
+                 </div>
+              </div>
+           </div>
+        </div>
+        
+        <div className="mt-6 flex space-x-4">
+           <div className="bg-emerald-50 text-emerald-800 text-xs px-3 py-2 rounded-lg border border-emerald-100 flex items-center">
+              <CheckCircle2 className="w-3 h-3 mr-2" /> Antibiotic Stewardship Protocol: <strong>Compliant (98%)</strong>
+           </div>
+           <div className="bg-blue-50 text-blue-800 text-xs px-3 py-2 rounded-lg border border-blue-100 flex items-center">
+              <CheckCircle2 className="w-3 h-3 mr-2" /> Surgical Safety Checklist Adherence: <strong>100%</strong>
+           </div>
         </div>
       </div>
     </div>
@@ -1173,7 +1278,7 @@ const App = () => {
       <div className="bg-white p-6 rounded-xl shadow-sm border border-slate-100">
         <div className="flex justify-between items-center mb-6">
           <h3 className="text-lg font-bold text-slate-900 flex items-center"><Landmark className="w-5 h-5 mr-2 text-blue-600" /> Capex & Asset Management</h3>
-          <button onClick={() => showNotification('Opening New Capex Request Form...', 'info')} className="flex items-center px-4 py-2 bg-blue-600 text-white rounded-lg text-sm font-medium hover:bg-blue-700 transition-colors shadow-sm"><Plus className="w-4 h-4 mr-2" /> New Capex Request</button>
+          <button onClick={() => setIsCapexModalOpen(true)} className="flex items-center px-4 py-2 bg-blue-600 text-white rounded-lg text-sm font-medium hover:bg-blue-700 transition-colors shadow-sm"><Plus className="w-4 h-4 mr-2" /> New Capex Request</button>
         </div>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
           <div className="p-4 bg-slate-50 border border-slate-200 rounded-lg"><p className="text-xs text-slate-500 uppercase mb-2 font-bold">Asset Lifecycle Distribution</p><div className="flex items-end space-x-2 h-16"><div className="flex-1 bg-emerald-400 rounded-t h-[30%] flex justify-center items-end text-[10px] pb-1 text-white font-bold">New</div><div className="flex-1 bg-blue-400 rounded-t h-[50%] flex justify-center items-end text-[10px] pb-1 text-white font-bold">Mid</div><div className="flex-1 bg-amber-400 rounded-t h-[20%] flex justify-center items-end text-[10px] pb-1 text-white font-bold">End</div></div></div>
@@ -1489,13 +1594,13 @@ const App = () => {
           <div className="space-y-4">
             <div className="border border-slate-200 rounded-lg p-4 bg-slate-50">
               <h4 className="font-bold text-slate-900 text-xs mb-3 flex items-center"><History className="w-3 h-3 mr-2" /> Payout Trend (6 Mo)</h4>
-              <div className="h-32 flex items-end space-x-2">
+              <div className="h-32 flex items-end space-x-2 pt-4">
                 {[
                   { m: 'May', v: 38 }, { m: 'Jun', v: 40 }, { m: 'Jul', v: 41 }, 
                   { m: 'Aug', v: 39 }, { m: 'Sep', v: 44 }, { m: 'Oct', v: 45 }
                 ].map((item, i) => (
                   <div key={i} className="flex-1 flex flex-col items-center justify-end group relative h-full">
-                    <div className="absolute -top-6 text-[10px] font-bold text-slate-600 opacity-0 group-hover:opacity-100 transition-opacity">₹{item.v}L</div>
+                    <div className="absolute -top-6 text-[10px] font-bold text-slate-600 opacity-100 transition-opacity">₹{item.v}L</div>
                     <div className="w-full bg-blue-400 rounded-t hover:bg-blue-500 transition-colors" style={{ height: `${(item.v / 50) * 100}%` }}></div>
                     <span className="text-[9px] text-slate-500 mt-1 font-medium">{item.m}</span>
                   </div>
@@ -1560,7 +1665,7 @@ const App = () => {
   // === REPORTS TAB ===
   const renderReports = () => {
     const reportsList = [
-      { id: 'pharmacy', title: 'Pharmacy Margin Audit', desc: 'Forensic analysis of pharmacy procurement, highlighting 7% cap breaches.', type: 'Internal Audit', date: 'Oct 31, 2025', status: 'Critical', icon: AlertTriangle, color: 'text-red-500', bg: 'bg-red-50', border: 'border-red-100', author: 'System Auto-Gen' },
+      { id: 'pharmacy', title: 'Pharmacy Margin Audit', desc: 'Forensic analysis of pharmacy procurement, highlighting 7% cap breaches.', type: 'Internal Audit', date: 'Feb 1, 2026', status: 'Critical', icon: AlertTriangle, color: 'text-red-500', bg: 'bg-red-50', border: 'border-red-100', author: 'System Auto-Gen' },
       { id: 'cashflow', title: 'Consolidated Cash Flow', desc: 'Monthly cash flow statement aligned with accounting standards.', type: 'Financial', date: 'Nov 01, 2025', status: 'Ready', icon: RefreshCw, color: 'text-blue-500', bg: 'bg-blue-50', border: 'border-blue-100', author: 'Finance Controller' },
       { id: 'payouts', title: 'Variable Pay Disbursal', desc: 'Automated calculation of doctor payouts based on procedure volume.', type: 'HR / Finance', date: 'Nov 02, 2025', status: 'Pending Approval', icon: Stethoscope, color: 'text-blue-500', bg: 'bg-blue-50', border: 'border-blue-100', author: 'HR Payroll' },
       { id: 'inventory', title: 'Inventory Aging Analysis', desc: 'Breakdown of slow-moving (90+ days) stock across all units.', type: 'Operations', date: 'Oct 28, 2025', status: 'Ready', icon: Truck, color: 'text-amber-500', bg: 'bg-amber-50', border: 'border-amber-100', author: 'Supply Chain Head' },
@@ -1571,14 +1676,14 @@ const App = () => {
     if (selectedReport) {
       const activeReport = reportsList.find(r => r.id === selectedReport) || reportsList[0];
       return (
-        <div className="animate-slide-in-bottom">
+        <div className="animate-in fade-in slide-in-from-bottom-4 duration-500">
           <button onClick={() => setSelectedReport(null)} className="flex items-center text-slate-500 hover:text-blue-600 mb-4 text-sm font-medium transition-colors"><ArrowLeft className="w-4 h-4 mr-1" /> Back to Reports List</button>
           <div className="bg-white p-8 md:p-12 shadow-xl rounded-sm max-w-4xl mx-auto border border-slate-200 min-h-[800px]">
             <div className="flex justify-between items-start border-b-2 border-blue-600 pb-6 mb-8">
               <div>
                 <h1 className="text-3xl font-bold text-slate-900">{activeReport.title}</h1>
                 <p className="text-slate-500 mt-2 text-sm uppercase tracking-wider font-semibold">Classification: {activeReport.type}</p>
-                <p className="text-slate-500 mt-1 text-sm">Generated: {activeReport.date} | Author: {activeReport.author}</p>
+                <p className="text-slate-500 mt-1 text-sm">Generated on {activeReport.date} | Author: {activeReport.author}</p>
               </div>
               <div className="text-right">
                 <div className="flex items-center justify-end text-slate-900 font-bold text-xl mb-1"><HeartPulse className="w-6 h-6 mr-2 text-blue-600" /> Project 10</div>
@@ -1672,6 +1777,7 @@ const App = () => {
       <AnimationStyles />
       {notification && <Notification message={notification.message} type={notification.type} onClose={() => setNotification(null)} />}
       <InvoiceModal invoice={selectedInvoice} onClose={() => setSelectedInvoice(null)} />
+      <CapexModal isOpen={isCapexModalOpen} onClose={() => setIsCapexModalOpen(false)} />
       
       {/* Sidebar Overlay for Mobile */}
       {isSidebarOpen && (
