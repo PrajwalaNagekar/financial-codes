@@ -429,7 +429,7 @@ const App = () => {
     { id: 'doctor_portal', icon: Users, label: 'Doctor Self-Service', category: 'clinical' },
     { id: 'assets', icon: Landmark, label: 'Capex & Assets', category: 'operations' },
     { id: 'budget', icon: Target, label: 'Budget vs Actuals', category: 'financial' },
-    { id: 'ipo', icon: LayoutGrid, label: 'IPO Readiness', category: 'legal' },
+    // { id: 'ipo', icon: LayoutGrid, label: 'IPO Readiness', category: 'legal' },
     { id: 'audit', icon: ShieldCheck, label: 'Audit Trail', category: 'legal' },
     { id: 'vendor', icon: ClipboardList, label: 'Vendor Management', category: 'operations' },
     { id: 'system_health', icon: Server, label: 'System Health', category: 'tech' },
@@ -1371,55 +1371,55 @@ const App = () => {
   );
 
   // === IPO READINESS ===
-  const renderIPO = () => (
-    <div className="space-y-6 animate-fade-in">
-      <div className="bg-white p-6 rounded-xl shadow-sm border border-slate-100">
-        <h3 className="text-lg font-bold text-slate-900 mb-4 flex items-center"><LayoutGrid className="w-5 h-5 mr-2 text-blue-600" /> IPO Readiness & Data Room</h3>
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
-          <div className="p-4 border border-blue-100 bg-blue-50 rounded-lg text-center"><p className="text-2xl font-bold text-blue-700">{Math.round((ipoChecklist.filter(i => i.completed).length / ipoChecklist.length) * 100)}%</p><p className="text-xs text-blue-600 uppercase tracking-wide font-semibold mt-1">DRHP Readiness</p></div>
-          <div className="p-4 border border-blue-100 bg-blue-50 rounded-lg text-center"><p className="text-2xl font-bold text-blue-700">12/15</p><p className="text-xs text-blue-600 uppercase tracking-wide font-semibold mt-1">Audit Queries Closed</p></div>
-          <div className="p-4 border border-blue-100 bg-blue-50 rounded-lg text-center"><p className="text-2xl font-bold text-blue-700">8</p><p className="text-xs text-blue-600 uppercase tracking-wide font-semibold mt-1">Active Investors</p></div>
-          <div className="p-4 border border-blue-100 bg-blue-50 rounded-lg text-center"><p className="text-2xl font-bold text-blue-700">142</p><p className="text-xs text-blue-600 uppercase tracking-wide font-semibold mt-1">Files in VDR</p></div>
-        </div>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
-          <div className="bg-white border border-slate-200 rounded-lg p-5">
-            <h4 className="font-bold text-sm text-slate-700 mb-4">Road to Listing (Timeline)</h4>
-            <div className="space-y-4 relative pl-4 border-l-2 border-slate-100">
-              <div className="relative"><div className="absolute -left-[21px] top-1 w-3 h-3 bg-emerald-500 rounded-full border-2 border-white"></div><p className="text-xs text-slate-500">Q1 2025</p><p className="text-sm font-bold text-emerald-700">Financial Restatement</p></div>
-              <div className="relative"><div className="absolute -left-[21px] top-1 w-3 h-3 bg-blue-500 rounded-full border-2 border-white animate-pulse"></div><p className="text-xs text-slate-500">Q3 2025 (Current)</p><p className="text-sm font-bold text-blue-700">DRHP Drafting & Legal Due Diligence</p></div>
-              <div className="relative"><div className="absolute -left-[21px] top-1 w-3 h-3 bg-slate-300 rounded-full border-2 border-white"></div><p className="text-xs text-slate-500">Q4 2025</p><p className="text-sm font-medium text-slate-600">SEBI Filing & Approval</p></div>
-              <div className="relative"><div className="absolute -left-[21px] top-1 w-3 h-3 bg-slate-300 rounded-full border-2 border-white"></div><p className="text-xs text-slate-500">Q1 2026</p><p className="text-sm font-medium text-slate-600">Roadshow & Book Building</p></div>
-            </div>
-          </div>
-          <div className="bg-white border border-slate-200 rounded-lg p-5">
-            <h4 className="font-bold text-sm text-slate-700 mb-4">Governance & Compliance Checklist</h4>
-            <div className="space-y-3">
-              {ipoChecklist.map((item) => (
-                <div key={item.id} onClick={() => toggleIpoItem(item.id)} className="flex items-center cursor-pointer group hover:bg-slate-50 p-2 rounded transition-colors select-none">
-                  <div className={`w-5 h-5 rounded-full flex items-center justify-center mr-3 transition-colors ${item.completed ? 'bg-emerald-100' : 'bg-slate-100 group-hover:bg-slate-200'}`}>
-                    {item.completed ? <CheckCircle2 className="w-3 h-3 text-emerald-600" /> : <div className="w-2 h-2 bg-slate-300 rounded-full group-hover:bg-slate-400"></div>}
-                  </div>
-                  <span className={`text-sm transition-all ${item.completed ? 'text-slate-500 line-through decoration-slate-300' : 'text-slate-800 font-medium'}`}>{item.text}</span>
-                </div>
-              ))}
-            </div>
-          </div>
-        </div>
-        <div className="bg-slate-50 border border-slate-200 rounded-lg p-4 mb-6">
-          <div className="flex justify-between items-center mb-3"><h4 className="font-bold text-sm text-slate-700 flex items-center"><Database className="w-4 h-4 mr-2 text-blue-600" /> Virtual Data Room (VDR) Activity</h4><span className="text-[10px] bg-green-100 text-green-700 px-2 py-0.5 rounded-full font-bold">Live</span></div>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-sm">
-            <div><span className="text-slate-500 block text-xs mb-1">Top Active Investor</span><span className="font-bold text-slate-800 flex items-center"><Users className="w-3 h-3 mr-1 text-slate-400" /> BlackRock PE</span></div>
-            <div><span className="text-slate-500 block text-xs mb-1">Most Viewed Doc</span><span className="font-bold text-slate-800 flex items-center"><FileText className="w-3 h-3 mr-1 text-slate-400" /> FY24 Cons. Financials.pdf</span></div>
-            <div><span className="text-slate-500 block text-xs mb-1">Recent Upload</span><span className="font-bold text-slate-800 flex items-center"><Upload className="w-3 h-3 mr-1 text-slate-400" /> Litigation Summary Q3.xlsx</span></div>
-          </div>
-        </div>
-        <div className="flex space-x-3">
-          <button onClick={() => showNotification("Secure connection established to Virtual Data Room.", "success")} className="flex-1 bg-blue-900 hover:bg-blue-800 text-white py-2.5 rounded-lg text-sm font-medium flex items-center justify-center transition-colors shadow-lg shadow-blue-900/20"><Lock className="w-4 h-4 mr-2" /> Access Virtual Data Room</button>
-          <button onClick={() => showNotification("Opening Draft Red Herring Prospectus (v4.2)...", "info")} className="flex-1 border border-slate-300 hover:bg-slate-50 text-slate-700 py-2.5 rounded-lg text-sm font-medium flex items-center justify-center transition-colors"><FileText className="w-4 h-4 mr-2" /> View DRHP Draft</button>
-        </div>
-      </div>
-    </div>
-  );
+  // const renderIPO = () => (
+  //   <div className="space-y-6 animate-fade-in">
+  //     <div className="bg-white p-6 rounded-xl shadow-sm border border-slate-100">
+  //       <h3 className="text-lg font-bold text-slate-900 mb-4 flex items-center"><LayoutGrid className="w-5 h-5 mr-2 text-blue-600" /> IPO Readiness & Data Room</h3>
+  //       <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
+  //         <div className="p-4 border border-blue-100 bg-blue-50 rounded-lg text-center"><p className="text-2xl font-bold text-blue-700">{Math.round((ipoChecklist.filter(i => i.completed).length / ipoChecklist.length) * 100)}%</p><p className="text-xs text-blue-600 uppercase tracking-wide font-semibold mt-1">DRHP Readiness</p></div>
+  //         <div className="p-4 border border-blue-100 bg-blue-50 rounded-lg text-center"><p className="text-2xl font-bold text-blue-700">12/15</p><p className="text-xs text-blue-600 uppercase tracking-wide font-semibold mt-1">Audit Queries Closed</p></div>
+  //         <div className="p-4 border border-blue-100 bg-blue-50 rounded-lg text-center"><p className="text-2xl font-bold text-blue-700">8</p><p className="text-xs text-blue-600 uppercase tracking-wide font-semibold mt-1">Active Investors</p></div>
+  //         <div className="p-4 border border-blue-100 bg-blue-50 rounded-lg text-center"><p className="text-2xl font-bold text-blue-700">142</p><p className="text-xs text-blue-600 uppercase tracking-wide font-semibold mt-1">Files in VDR</p></div>
+  //       </div>
+  //       <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+  //         <div className="bg-white border border-slate-200 rounded-lg p-5">
+  //           <h4 className="font-bold text-sm text-slate-700 mb-4">Road to Listing (Timeline)</h4>
+  //           <div className="space-y-4 relative pl-4 border-l-2 border-slate-100">
+  //             <div className="relative"><div className="absolute -left-[21px] top-1 w-3 h-3 bg-emerald-500 rounded-full border-2 border-white"></div><p className="text-xs text-slate-500">Q1 2025</p><p className="text-sm font-bold text-emerald-700">Financial Restatement</p></div>
+  //             <div className="relative"><div className="absolute -left-[21px] top-1 w-3 h-3 bg-blue-500 rounded-full border-2 border-white animate-pulse"></div><p className="text-xs text-slate-500">Q3 2025 (Current)</p><p className="text-sm font-bold text-blue-700">DRHP Drafting & Legal Due Diligence</p></div>
+  //             <div className="relative"><div className="absolute -left-[21px] top-1 w-3 h-3 bg-slate-300 rounded-full border-2 border-white"></div><p className="text-xs text-slate-500">Q4 2025</p><p className="text-sm font-medium text-slate-600">SEBI Filing & Approval</p></div>
+  //             <div className="relative"><div className="absolute -left-[21px] top-1 w-3 h-3 bg-slate-300 rounded-full border-2 border-white"></div><p className="text-xs text-slate-500">Q1 2026</p><p className="text-sm font-medium text-slate-600">Roadshow & Book Building</p></div>
+  //           </div>
+  //         </div>
+  //         <div className="bg-white border border-slate-200 rounded-lg p-5">
+  //           <h4 className="font-bold text-sm text-slate-700 mb-4">Governance & Compliance Checklist</h4>
+  //           <div className="space-y-3">
+  //             {ipoChecklist.map((item) => (
+  //               <div key={item.id} onClick={() => toggleIpoItem(item.id)} className="flex items-center cursor-pointer group hover:bg-slate-50 p-2 rounded transition-colors select-none">
+  //                 <div className={`w-5 h-5 rounded-full flex items-center justify-center mr-3 transition-colors ${item.completed ? 'bg-emerald-100' : 'bg-slate-100 group-hover:bg-slate-200'}`}>
+  //                   {item.completed ? <CheckCircle2 className="w-3 h-3 text-emerald-600" /> : <div className="w-2 h-2 bg-slate-300 rounded-full group-hover:bg-slate-400"></div>}
+  //                 </div>
+  //                 <span className={`text-sm transition-all ${item.completed ? 'text-slate-500 line-through decoration-slate-300' : 'text-slate-800 font-medium'}`}>{item.text}</span>
+  //               </div>
+  //             ))}
+  //           </div>
+  //         </div>
+  //       </div>
+  //       <div className="bg-slate-50 border border-slate-200 rounded-lg p-4 mb-6">
+  //         <div className="flex justify-between items-center mb-3"><h4 className="font-bold text-sm text-slate-700 flex items-center"><Database className="w-4 h-4 mr-2 text-blue-600" /> Virtual Data Room (VDR) Activity</h4><span className="text-[10px] bg-green-100 text-green-700 px-2 py-0.5 rounded-full font-bold">Live</span></div>
+  //         <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-sm">
+  //           <div><span className="text-slate-500 block text-xs mb-1">Top Active Investor</span><span className="font-bold text-slate-800 flex items-center"><Users className="w-3 h-3 mr-1 text-slate-400" /> BlackRock PE</span></div>
+  //           <div><span className="text-slate-500 block text-xs mb-1">Most Viewed Doc</span><span className="font-bold text-slate-800 flex items-center"><FileText className="w-3 h-3 mr-1 text-slate-400" /> FY24 Cons. Financials.pdf</span></div>
+  //           <div><span className="text-slate-500 block text-xs mb-1">Recent Upload</span><span className="font-bold text-slate-800 flex items-center"><Upload className="w-3 h-3 mr-1 text-slate-400" /> Litigation Summary Q3.xlsx</span></div>
+  //         </div>
+  //       </div>
+  //       <div className="flex space-x-3">
+  //         <button onClick={() => showNotification("Secure connection established to Virtual Data Room.", "success")} className="flex-1 bg-blue-900 hover:bg-blue-800 text-white py-2.5 rounded-lg text-sm font-medium flex items-center justify-center transition-colors shadow-lg shadow-blue-900/20"><Lock className="w-4 h-4 mr-2" /> Access Virtual Data Room</button>
+  //         <button onClick={() => showNotification("Opening Draft Red Herring Prospectus (v4.2)...", "info")} className="flex-1 border border-slate-300 hover:bg-slate-50 text-slate-700 py-2.5 rounded-lg text-sm font-medium flex items-center justify-center transition-colors"><FileText className="w-4 h-4 mr-2" /> View DRHP Draft</button>
+  //       </div>
+  //     </div>
+  //   </div>
+  // );
 
   // === VENDOR MANAGEMENT ===
   const renderVendor = () => (
@@ -1805,7 +1805,7 @@ const App = () => {
           {activeTab === 'doctor_portal' && renderDoctorPortal()}
           {activeTab === 'assets' && renderAssets()}
           {activeTab === 'budget' && renderBudget()}
-          {activeTab === 'ipo' && renderIPO()}
+          {/* {activeTab === 'ipo' && renderIPO()} */}
           {activeTab === 'vendor' && renderVendor()}
           {activeTab === 'system_health' && renderSystemHealth()}
           {activeTab === 'patient_exp' && renderPatientExp()}
