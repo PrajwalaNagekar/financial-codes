@@ -336,18 +336,18 @@ const App = () => {
   const [selectedInvoice, setSelectedInvoice] = useState<InvoiceItem | null>(null);
   const [metricsType, setMetricsType] = useState('financial');
   const [isCapexModalOpen, setIsCapexModalOpen] = useState(false);
-  const [ipoChecklist, setIpoChecklist] = useState([
-    { id: 1, text: 'Independent Directors Appointed (3/3)', completed: true },
-    { id: 2, text: 'Audit Committee Formed', completed: true },
-    { id: 3, text: 'RHP Filing Draft - In Review', completed: false },
-    { id: 4, text: 'Roadshow Presentation', completed: false }
-  ]);
+  // const [ipoChecklist, setIpoChecklist] = useState([
+  //   { id: 1, text: 'Independent Directors Appointed (3/3)', completed: true },
+  //   { id: 2, text: 'Audit Committee Formed', completed: true },
+  //   { id: 3, text: 'RHP Filing Draft - In Review', completed: false },
+  //   { id: 4, text: 'Roadshow Presentation', completed: false }
+  // ]);
 
-  const toggleIpoItem = (id: number) => {
-    setIpoChecklist(items => items.map(item =>
-      item.id === id ? { ...item, completed: !item.completed } : item
-    ));
-  };
+  // const toggleIpoItem = (id: number) => {
+  //   setIpoChecklist(items => items.map(item =>
+  //     item.id === id ? { ...item, completed: !item.completed } : item
+  //   ));
+  // };
 
   const showNotification = (message: string, type = 'info') => {
     setNotification({ message, type });
