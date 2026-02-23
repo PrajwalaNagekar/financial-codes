@@ -4,8 +4,8 @@ import {
   CheckCircle2, Building2, TrendingUp, Download, ShieldCheck, HeartPulse,
   AlertTriangle, ArrowUpRight, ArrowLeft, PieChart, Users, BedDouble,
   IndianRupee, Briefcase, ClipboardList, Truck, Landmark, Target,
-  FileBarChart, LayoutGrid, Server, Smile, Baby, Eye, FileDown, Search,
-  Clock, Database, Lock, Plus, Wrench, FileClock, ArrowRightLeft,
+  FileBarChart, Server, Smile, Baby, Eye, FileDown, Search,
+  Clock, Database, Plus, Wrench, FileClock, ArrowRightLeft,
   ShoppingCart, Send, CheckSquare, Ban, History, Upload, Info, Printer,
   X, Menu, Bone,
 } from 'lucide-react';
